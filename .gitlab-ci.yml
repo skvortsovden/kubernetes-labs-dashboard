@@ -6,7 +6,7 @@ variables:
   IMAGE_NAME: ghcr.io/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}:$CI_COMMIT_REF_SLUG
 
 before_script:
-  - echo "$GITHUB_TOKEN" | docker login ghcr.io -u "$GITHUB_USERNAME" --password-stdin
+  - echo "$CI_JOB_TOKEN" | docker login ghcr.io -u "$GITHUB_USERNAME" --password-stdin
 
 build:
   stage: build
