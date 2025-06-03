@@ -13,13 +13,12 @@ sequenceDiagram
 
     User->>Browser: Open dashboard URL
     Browser->>FlaskApp: HTTP GET /
-    FlaskApp->>KubernetesAPI: GET /apis/training.dev/v1/namespaces/default/labs
-    KubernetesAPI-->>FlaskApp: Return Labs CRD list (JSON with metadata, spec, status)
-    FlaskApp->>FlaskApp: Render HTML with labs and resources
+    FlaskApp->>KubernetesAPI: Query Labs CRD (list_namespaced_custom_object)
+    KubernetesAPI-->>FlaskApp: Return Labs data (JSON)
+    FlaskApp->>FlaskApp: Render HTML with labs data
     FlaskApp-->>Browser: Return rendered HTML
     Browser->>User: Display Labs Dashboard
 ```
-
 ## Features
 
 - View and manage Kubernetes resources
@@ -61,6 +60,30 @@ sequenceDiagram
 2. Run the container:
     ```bash
     docker run -p 8080:8080 -v ~/.kube:/root/.kube kubernetes-labs-dashboard
+    ```
+3. Open your browser and navigate to `http://localhost:8080`.
+
+## Build and run with Docker
+
+1. Build the Docker image:
+    ```bash
+    docker build -t kubernetes-labs-dashboard .
+    ```
+2. Run the container:
+    ```bash
+    docker run -p 8080:8080 -v ~/.kube:/root/.kube kubernetes-labs-dashboard
+    ```
+3. Open your browser and navigate to `http://localhost:8080`.
+
+## Build and run with Podman
+
+1. Build the image:
+    ```bash
+    podman build -t kubernetes-labs-dashboard .
+    ```
+2. Run the container:
+    ```bash
+    podman run -p 8080:8080 -v ~/.kube:/root/.kube:Z kubernetes-labs-dashboard
     ```
 3. Open your browser and navigate to `http://localhost:8080`.
 
