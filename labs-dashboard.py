@@ -33,6 +33,7 @@ TEMPLATE = """
 </head>
 <body>
     <h1>Lab Status</h1>
+    {% if labs %}
     <table>
         <tr>
             <th>Name</th>
@@ -85,6 +86,11 @@ TEMPLATE = """
         {% endif %}
         {% endfor %}
     </table>
+    {% else %}
+    <div style="margin:2em 0; font-size:1.2em; color:#555; background:#fffbe7; border:1px solid #ffe082; border-radius:6px; padding:1.5em 1em; text-align:center;">
+        No labs found. Please create one and refresh this page.
+    </div>
+    {% endif %}
 </body>
 </html>
 """
