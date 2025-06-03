@@ -2,6 +2,24 @@
 
 A web-based dashboard for managing and visualizing Kubernetes lab environments.
 
+## How it Works: Sequence Diagram
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant Browser
+    participant FlaskApp
+    participant KubernetesAPI
+
+    User->>Browser: Open dashboard URL
+    Browser->>FlaskApp: HTTP GET /
+    FlaskApp->>KubernetesAPI: GET /apis/training.dev/v1/namespaces/default/labs
+    KubernetesAPI-->>FlaskApp: Return Labs CRD list (JSON with metadata, spec, status)
+    FlaskApp->>FlaskApp: Render HTML with labs and resources
+    FlaskApp-->>Browser: Return rendered HTML
+    Browser->>User: Display Labs Dashboard
+```
+
 ## Features
 
 - View and manage Kubernetes resources
@@ -14,22 +32,37 @@ A web-based dashboard for managing and visualizing Kubernetes lab environments.
     ```bash
     git clone https://github.com/yourusername/kubernetes-labs-dashboard.git
     ```
-2. Follow the setup instructions in the `docs/` directory.
+2. Follow the setup instructions on how to start.
+
 
 ## How to Start
 
-1. Install dependencies:
+1. (Optional but recommended) Create and activate a Python virtual environment:
     ```bash
-    cd kubernetes-labs-dashboard
+    python3 -m venv venv
+    source venv/bin/activate
+    ```
+2. Install dependencies:
+    ```bash
     pip install -r requirements.txt
     ```
-2. Start the development server:
+3. Start the development server:
     ```bash
-    source venv/bin/activate
     python labs-dashboard.py
     ```
+4. Open your browser and navigate to `http://localhost:5000`.
+
+## Build and run with Docker
+
+1. Build the Docker image:
+    ```bash
+    docker build -t kubernetes-labs-dashboard .
     ```
-3. Open your browser and navigate to `http://localhost:5000`.
+2. Run the container:
+    ```bash
+    docker run -p 8080:8080 -v ~/.kube:/root/.kube kubernetes-labs-dashboard
+    ```
+3. Open your browser and navigate to `http://localhost:8080`.
 
 ## License
 
