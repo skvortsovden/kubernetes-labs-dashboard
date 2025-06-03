@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kubernetes-labs-dashboard
+  labels:
+    app: kubernetes-labs-dashboard
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kubernetes-labs-dashboard
+  template:
+    metadata:
+      labels:
+        app: kubernetes-labs-dashboard
+    spec:
+      containers:
+        - name: dashboard
+          image: ghcr.io/skvortsovden/kubernetes-labs-dashboard:latest
+          ports:
+            - containerPort: 8080
+          volumeMounts:
+            - name: kubeconfig
+              mountPath: /root/.kube
+              readOnly: true
+          env:
+            - name: FLASK_RUN_PORT
+              value: "8080"
+      volumes:
+        - name: kubeconfig
+          secret:
+            secretName: kubeconfig-secret
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kubernetes-labs-dashboard
+spec:
+  selector:
+    app: kubernetes-labs-dashboard
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+  type: ClusterIP

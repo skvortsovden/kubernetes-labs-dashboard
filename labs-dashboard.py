@@ -8,6 +8,8 @@ app = Flask(__name__)
 
 # Load Kubernetes config: use incluster config if available, fallback to kubeconfig for local dev
 try:
+    # This will use the service account token and cluster CA provided to every pod by Kubernetes, 
+    # and is the standard way for in-cluster apps to access the Kubernetes API.
     config.load_incluster_config()
 except config.ConfigException:
     config.load_kube_config()
