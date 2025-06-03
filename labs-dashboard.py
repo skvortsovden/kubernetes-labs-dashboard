@@ -6,8 +6,11 @@ import os
 
 app = Flask(__name__)
 
-# Load kubeconfig (or use config.load_incluster_config() if running in-cluster)
-config.load_kube_config()
+# Load Kubernetes config: use incluster config if available, fallback to kubeconfig for local dev
+try:
+    config.load_incluster_config()
+except config.ConfigException:
+    config.load_kube_config()
 
 crd_api = client.CustomObjectsApi()
 
