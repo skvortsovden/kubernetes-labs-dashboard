@@ -39,58 +39,61 @@ TEMPLATE = """
 <body>
     <h1>Lab Status</h1>
     {% if labs %}
-    <table>
-        <tr>
-            <th>Name</th>
-            <th>Task</th>
-            <th>Ready</th>
-            <th>Message</th>
-            <th>Error</th>
-        </tr>
         {% for lab in labs %}
-        <tr class="{{ 'true' if lab.ready else 'false' }}">
-            <td>{{ lab.name }}</td>
-            <td>{{ format_multiline(lab.task)|safe }}</td>
-            <td>{{ lab.ready }}</td>
-            <td>{{ lab.message or '' }}</td>
-            <td>{{ lab.error or '' }}</td>
-        </tr>
-        {% if lab.resources %}
-        <tr>
-            <td colspan="5" style="padding:0;">
-                <table class="resource-table">
-                    <tr>
-                        <th>Kind</th>
-                        <th>Name</th>
-                        <th>Namespace</th>
-                        <th>Status</th>
-                        <th>Error</th>
-                        <th>Mismatches</th>
-                    </tr>
-                    {% for res in lab.resources %}
-                    <tr class="resource-status-{{ res.status }}">
-                        <td>{{ res.kind }}</td>
-                        <td>{{ res.name }}</td>
-                        <td>{{ res.namespace }}</td>
-                        <td>{{ res.status }}</td>
-                        <td>{{ res.error or '' }}</td>
-                        <td>
-                            {% if res.mismatches %}
-                                <ul>
-                                {% for mm in res.mismatches %}
-                                    <li>{{ mm }}</li>
-                                {% endfor %}
-                                </ul>
-                            {% endif %}
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </table>
-            </td>
-        </tr>
-        {% endif %}
+        <table class="lab-table">
+            <tr>
+                <th>Name</th>
+                <th>Task</th>
+                <th>Ready</th>
+                <th>Message</th>
+                <th>Error</th>
+            </tr>
+            <tr class="{{ 'true' if lab.ready else 'false' }}">
+                <td>{{ lab.name }}</td>
+                <td>{{ format_multiline(lab.task)|safe }}</td>
+                <td>{{ lab.ready }}</td>
+                <td>{{ lab.message or '' }}</td>
+                <td>{{ lab.error or '' }}</td>
+            </tr>
+            {% if lab.resources %}
+            <tr>
+                <td colspan="5" style="padding:0;">
+                    <table class="resource-table">
+                        <tr>
+                            <th class="resources-header" colspan="6">Resources</th>
+                        </tr>
+                        <tr>
+                            <th>Kind</th>
+                            <th>Name</th>
+                            <th>Namespace</th>
+                            <th>Status</th>
+                            <th>Error</th>
+                            <th>Mismatches</th>
+                        </tr>
+                        {% for res in lab.resources %}
+                        <tr class="resource-status-{{ res.status }}">
+                            <td>{{ res.kind }}</td>
+                            <td>{{ res.name }}</td>
+                            <td>{{ res.namespace }}</td>
+                            <td>{{ res.status }}</td>
+                            <td>{{ res.error or '' }}</td>
+                            <td>
+                                {% if res.mismatches %}
+                                    <ul>
+                                    {% for mm in res.mismatches %}
+                                        <li>{{ mm }}</li>
+                                    {% endfor %}
+                                    </ul>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </td>
+            </tr>
+            {% endif %}
+        </table>
         {% endfor %}
-    </table>
     {% else %}
     <div style="margin:2em 0; font-size:1.2em; color:#555; background:#fffbe7; border:1px solid #ffe082; border-radius:6px; padding:1.5em 1em; text-align:center;">
         No labs found. Please create one and refresh this page.
